@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scout Attendance Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container dashboard-container">
+    <div class="dashboard-header">
+      <div>
+        <p class="eyebrow">Scout Attendance</p>
+        <h1>Scout Attendance Dashboard</h1>
+        <p id="welcome" class="welcome">Loading your account...</p>
+      </div>
+      <div class="header-actions">
+        <a id="reportsLink" class="button-link" href="reports.html" hidden>Attendance Reports</a>
+        <a id="manageScoutsLink" class="button-link" href="manage-scouts.html" hidden>Manage Scouts</a>
+        <a id="manageLeadersLink" class="button-link" href="manage-leaders.html" hidden>Manage Adult Leaders</a>
+        <button id="logoutBtn" class="secondary-button" type="button">Logout</button>
+      </div>
+    </div>
+
+    <section id="scoutPanel" class="panel" hidden>
+      <h2>My attendance</h2>
+      <p id="scoutStatusText">Mark yourself present for today.</p>
+      <button id="scoutAttendanceBtn" type="button">Mark My Attendance</button>
+    </section>
+
+    <section id="leaderPanel" class="panel" hidden>
+      <h2>Mark Scout attendance</h2>
+      <p>Use the button beside each Scout. Your name will be saved with the attendance record.</p>
+      <div class="roster-group">
+        <h3>Scouts not marked today</h3>
+        <div id="pendingScoutRoster" class="student-roster"></div>
+      </div>
+      <div class="roster-group present-roster-group">
+        <h3>Scouts present today</h3>
+        <div id="presentScoutRoster" class="student-roster"></div>
+      </div>
+    </section>
+
+    <p id="attendanceMessage" class="message" aria-live="polite"></p>
+
+    <section class="panel history-panel">
+      <h2>Attendance activity</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Scout</th>
+              <th>Scout ID</th>
+              <th>Date and time</th>
+              <th>Action</th>
+              <th>Action by</th>
+            </tr>
+          </thead>
+          <tbody id="activityTableBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyActivity" class="empty-state">No attendance activity yet.</p>
+    </section>
+
+    <section id="notesHistoryPanel" class="panel history-panel" hidden>
+      <h2>Scout notes</h2>
+      <p>Adult Leader notes for attendance-related details.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Scout</th>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Note</th>
+              <th>Updated by</th>
+            </tr>
+          </thead>
+          <tbody id="notesTableBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyNotes" class="empty-state">No Scout notes yet.</p>
+    </section>
+  </main>
+
+  <dialog id="noteDialog" class="note-dialog">
+    <form id="noteForm" class="note-form">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">Daily Scout Note</p>
+          <h2 id="noteDialogTitle">Add note</h2>
+        </div>
+        <button id="closeNoteDialog" class="dialog-close" type="button" aria-label="Close note dialog">×</button>
+      </div>
+
+      <label for="noteType">Category</label>
+      <select id="noteType" required>
+        <option value="sick">Out sick</option>
+        <option value="left-early">Left early</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="noteText">Additional details</label>
+      <textarea id="noteText" rows="4" maxlength="500" placeholder="Optional details"></textarea>
+
+      <p id="noteDialogMessage" class="message" aria-live="polite"></p>
+
+      <div class="dialog-actions">
+        <button id="cancelNote" class="secondary-button" type="button">Cancel</button>
+        <button id="saveNoteButton" type="submit">Save Note</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

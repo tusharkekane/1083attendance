@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Reports</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container dashboard-container reports-container">
+    <div class="dashboard-header no-print">
+      <div>
+        <p class="eyebrow">Scout Attendance</p>
+        <h1>Attendance Reports</h1>
+        <p id="welcome" class="welcome">Loading your account...</p>
+      </div>
+      <div class="header-actions">
+        <a class="button-link" href="dashboard.html">Attendance Dashboard</a>
+        <a class="button-link" href="manage-scouts.html">Manage Scouts</a>
+        <button id="logoutBtn" class="secondary-button" type="button">Logout</button>
+      </div>
+    </div>
+
+    <div class="report-tabs no-print" role="tablist" aria-label="Report type">
+      <button id="byScoutTab" class="report-tab active" type="button" role="tab" aria-selected="true" aria-controls="byScoutReport">By Scout</button>
+      <button id="byDateTab" class="report-tab" type="button" role="tab" aria-selected="false" aria-controls="byDateReport">By Date</button>
+    </div>
+
+    <div class="report-toolbar no-print">
+      <p>Use your browser's print dialog and choose <strong>Save as PDF</strong>.</p>
+      <button id="printReportBtn" type="button">Print / Save as PDF</button>
+    </div>
+
+    <section id="byScoutReport" class="panel report-panel" role="tabpanel" aria-labelledby="byScoutTab">
+      <div class="report-heading">
+        <div>
+          <p class="eyebrow">Report by Scout</p>
+          <h2 id="scoutReportTitle">Scout attendance</h2>
+          <p id="scoutReportSummary">Select a Scout to view every date they were present.</p>
+        </div>
+        <div class="report-filter no-print">
+          <label for="reportScoutSelect">Scout</label>
+          <select id="reportScoutSelect">
+            <option value="">Select a Scout</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date present</th>
+              <th>Marked by</th>
+              <th>Attendance note</th>
+            </tr>
+          </thead>
+          <tbody id="scoutReportBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyScoutReport" class="empty-state">Select a Scout to produce a report.</p>
+    </section>
+
+    <section id="byDateReport" class="panel report-panel" role="tabpanel" aria-labelledby="byDateTab" hidden>
+      <div class="report-heading">
+        <div>
+          <p class="eyebrow">Report by Date</p>
+          <h2 id="dateReportTitle">Daily attendance</h2>
+          <p id="dateReportSummary">Select a date to view every Scout.</p>
+        </div>
+        <div class="report-filter no-print">
+          <label for="reportDate">Date</label>
+          <input id="reportDate" type="date" required>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Scout</th>
+              <th>Scout ID</th>
+              <th>Status</th>
+              <th>Marked by</th>
+              <th>Attendance note</th>
+            </tr>
+          </thead>
+          <tbody id="dateReportBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyDateReport" class="empty-state">No Scouts are registered.</p>
+    </section>
+
+    <p id="reportMessage" class="message no-print" aria-live="polite"></p>
+  </main>
+
+  <script type="module" src="reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Adult Leaders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container dashboard-container">
+    <div class="dashboard-header">
+      <div>
+        <p class="eyebrow">Leadership Management</p>
+        <h1>Manage Adult Leaders</h1>
+        <p id="welcome" class="welcome">Loading your account...</p>
+      </div>
+      <div class="header-actions">
+        <a class="button-link" href="dashboard.html">Attendance Dashboard</a>
+        <a class="button-link" href="reports.html">Attendance Reports</a>
+        <a class="button-link" href="manage-scouts.html">Manage Scouts</a>
+        <button id="logoutBtn" class="secondary-button" type="button">Logout</button>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h2>Pending Adult Leader approvals</h2>
+      <p>Approve only people whose identity and leadership role you have verified.</p>
+      <div id="pendingLeaderRoster" class="student-roster management-roster"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Active Adult Leaders</h2>
+      <p>Removing a leader blocks their access while preserving their account history.</p>
+      <div id="activeLeaderRoster" class="student-roster management-roster"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Archived Adult Leaders</h2>
+      <p>Restore a leader if they return or were removed accidentally.</p>
+      <div id="archivedLeaderRoster" class="student-roster management-roster"></div>
+    </section>
+
+    <p id="managementMessage" class="message" aria-live="polite"></p>
+  </main>
+
+  <script type="module" src="manage-leaders.js"></script>
+</body>
+</html>

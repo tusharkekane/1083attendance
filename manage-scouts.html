@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Scouts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container dashboard-container">
+    <div class="dashboard-header">
+      <div>
+        <p class="eyebrow">Roster Management</p>
+        <h1>Manage Scouts</h1>
+        <p id="welcome" class="welcome">Loading your account...</p>
+      </div>
+      <div class="header-actions">
+        <a class="button-link" href="dashboard.html">Attendance Dashboard</a>
+        <a class="button-link" href="reports.html">Attendance Reports</a>
+        <a class="button-link" href="manage-leaders.html">Manage Adult Leaders</a>
+        <button id="logoutBtn" class="secondary-button" type="button">Logout</button>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h2>Add a Scout</h2>
+      <p>Create the Scout's login and add them to the active roster.</p>
+      <form id="addScoutForm" class="management-form">
+        <div class="form-grid">
+          <div class="field-group">
+            <label for="scoutName">Full name</label>
+            <input type="text" id="scoutName" placeholder="Scout's full name" autocomplete="off" required>
+          </div>
+          <div class="field-group">
+            <label for="scoutId">Scout ID</label>
+            <input type="text" id="scoutId" placeholder="Scout ID" autocomplete="off" required>
+          </div>
+          <div class="field-group">
+            <label for="scoutEmail">Email</label>
+            <input type="email" id="scoutEmail" placeholder="scout@example.com" autocomplete="off" required>
+          </div>
+          <div class="field-group">
+            <label for="scoutPassword">Initial password</label>
+            <input type="password" id="scoutPassword" placeholder="At least 6 characters" minlength="6" autocomplete="new-password" required>
+          </div>
+          <div class="field-group full-width-field">
+            <label for="confirmScoutPassword">Confirm initial password</label>
+            <input type="password" id="confirmScoutPassword" placeholder="Enter the password again" minlength="6" autocomplete="new-password" required>
+          </div>
+        </div>
+        <button id="addScoutButton" type="submit" disabled>Add Scout</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Active Scouts</h2>
+      <p>Removing a Scout archives their account while preserving all attendance history.</p>
+      <div id="activeScoutRoster" class="student-roster management-roster"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Archived Scouts</h2>
+      <p>Restore a Scout if they return or were removed accidentally.</p>
+      <div id="archivedScoutRoster" class="student-roster management-roster"></div>
+    </section>
+
+    <p id="managementMessage" class="message" aria-live="polite"></p>
+  </main>
+
+  <script type="module" src="manage-scouts.js"></script>
+</body>
+</html>

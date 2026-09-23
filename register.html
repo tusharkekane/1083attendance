@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adult Leader Registration</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container auth-container">
+    <p class="eyebrow">Scout Attendance</p>
+    <h1>Adult Leader Registration</h1>
+    <p class="subtitle">New Adult Leader accounts require approval from an existing Adult Leader.</p>
+
+    <form id="registerForm">
+      <label for="name">Full name</label>
+      <input type="text" id="name" placeholder="Full name" autocomplete="name" required>
+
+      <label for="accountId">Adult Leader ID</label>
+      <input type="text" id="accountId" placeholder="Adult Leader ID" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="name@example.com" autocomplete="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="At least 6 characters" minlength="6" autocomplete="new-password" required>
+
+      <label for="confirmPassword">Confirm password</label>
+      <input type="password" id="confirmPassword" placeholder="Enter the password again" minlength="6" autocomplete="new-password" required>
+
+      <button id="registerButton" type="submit">Register</button>
+    </form>
+
+    <p id="message" class="message" aria-live="polite"></p>
+    <p class="auth-link">Already registered? <a href="login.html">Login</a></p>
+  </main>
+
+  <script type="module" src="register.js"></script>
+</body>
+</html>
