@@ -114,7 +114,6 @@ async function addScout(event) {
       role: "scout",
       requestedRole: "scout",
       status: "active",
-      loginEnabled: false,
       scoutId,
       createdByUid: currentUser.uid,
       createdByName: currentProfile.name,
