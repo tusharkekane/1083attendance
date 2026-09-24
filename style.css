@@ -1,18 +1,22 @@
 :root {
-  --primary: #0071e3;
-  --primary-hover: #0077ed;
-  --primary-soft: #e8f2ff;
-  --text: #1d1d1f;
-  --muted: #6e6e73;
-  --border: rgba(0, 0, 0, 0.11);
-  --surface: rgba(255, 255, 255, 0.94);
-  --surface-muted: #f5f5f7;
-  --background: #f5f5f7;
+  --primary: #cf102d;
+  --primary-hover: #ad0d25;
+  --primary-soft: #fff0f2;
+  --navy: #003f7f;
+  --navy-soft: #edf4fb;
+  --sidebar: #55585b;
+  --sidebar-active: #24272a;
+  --text: #202124;
+  --muted: #62666a;
+  --border: #dfe1e4;
+  --surface: #ffffff;
+  --surface-muted: #f8f8f8;
+  --background: #eceeef;
   --success: #248a3d;
   --success-soft: #eaf7ed;
   --error: #d70015;
   --error-soft: #fff0f1;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.1);
+  --shadow: 0 8px 24px rgba(25, 29, 33, 0.12);
 }
 
 * {
@@ -34,11 +38,10 @@ body {
   min-height: 100svh;
   padding: 42px 20px;
   background:
-    radial-gradient(circle at 12% 0%, rgba(0, 113, 227, 0.13), transparent 31rem),
-    radial-gradient(circle at 94% 100%, rgba(120, 82, 255, 0.09), transparent 28rem),
+    linear-gradient(180deg, #f4f4f4 0, var(--background) 22rem),
     var(--background);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-family: Arial, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   display: flex;
   align-items: center;
@@ -50,19 +53,17 @@ body {
   width: 100%;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.78);
-  border-radius: 28px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
   background: var(--surface);
   box-shadow: var(--shadow);
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
 }
 
 .container::before {
   position: absolute;
   inset: 0 0 auto;
   height: 4px;
-  background: linear-gradient(90deg, #0071e3, #64a8ff 50%, #7d5cff);
+  background: var(--primary);
   content: "";
 }
 
@@ -72,8 +73,11 @@ body {
 }
 
 .dashboard-container {
-  max-width: 1100px;
-  padding: 42px;
+  min-height: calc(100svh - 48px);
+  max-width: 1440px;
+  padding: 140px 28px 38px 244px;
+  overflow: hidden;
+  background: var(--background);
 }
 
 h1,
@@ -98,19 +102,26 @@ textarea {
   resize: vertical;
 }
 
+h1,
+h2,
+h3 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
 h1 {
   margin-bottom: 10px;
   font-size: clamp(30px, 4vw, 42px);
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.015em;
   line-height: 1.08;
 }
 
 h2 {
   margin-bottom: 8px;
   font-size: 21px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  color: var(--navy);
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .eyebrow {
@@ -118,8 +129,8 @@ h2 {
   margin-bottom: 14px;
   padding: 6px 11px;
   border-radius: 999px;
-  background: var(--primary-soft);
-  color: var(--primary);
+  background: var(--navy-soft);
+  color: var(--navy);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.07em;
@@ -209,10 +220,10 @@ textarea:hover {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--primary);
+  border-color: var(--navy);
   outline: none;
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.14);
+  box-shadow: 0 0 0 4px rgba(0, 63, 127, 0.14);
 }
 
 button {
@@ -311,27 +322,57 @@ a:hover {
 }
 
 .dashboard-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 28px;
-  padding-bottom: 26px;
-  border-bottom: 1px solid var(--border);
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 .dashboard-header > div:first-child {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
   min-width: 0;
+  min-height: 120px;
+  padding: 14px 32px 14px 244px;
+  background: var(--primary);
+  color: #fff;
+}
+
+.dashboard-header > div:first-child .eyebrow {
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.dashboard-header > div:first-child h1 {
+  margin-bottom: 5px;
+  color: #fff;
+  font-size: clamp(28px, 3vw, 36px);
+}
+
+.dashboard-header > div:first-child .welcome {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 14px;
 }
 
 .header-actions {
+  position: absolute;
+  z-index: 1;
+  top: 120px;
+  bottom: 0;
+  left: 0;
   display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 10px;
+  width: 216px;
   max-width: 100%;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 18px 0;
+  background: var(--sidebar);
 }
 
 .button-link {
@@ -349,6 +390,36 @@ a:hover {
   transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
+.header-actions .button-link,
+.header-actions button {
+  width: 100%;
+  min-height: 54px;
+  justify-content: flex-start;
+  padding: 14px 22px;
+  border: 0;
+  border-left: 4px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  text-align: left;
+  transform: none;
+}
+
+.header-actions .button-link:hover,
+.header-actions button:hover {
+  border-left-color: var(--primary);
+  background: var(--sidebar-active);
+  box-shadow: none;
+  text-decoration: none;
+  transform: none;
+}
+
+.header-actions .secondary-button {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
 .button-link:hover {
   background: var(--primary-hover);
   box-shadow: 0 7px 18px rgba(0, 113, 227, 0.22);
@@ -363,10 +434,11 @@ a:hover {
 .panel {
   min-width: 0;
   margin-top: 20px;
-  padding: 25px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 20px;
-  background: var(--surface-muted);
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 2px 7px rgba(25, 29, 33, 0.04);
 }
 
 .panel[hidden] {
@@ -380,7 +452,7 @@ a:hover {
 
 .roster-group h3 {
   margin-bottom: 10px;
-  color: var(--muted);
+  color: var(--navy);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -400,7 +472,7 @@ a:hover {
 .student-roster {
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 15px;
+  border-radius: 7px;
   background: #fff;
 }
 
@@ -412,7 +484,8 @@ a:hover {
   display: inline-flex;
   padding: 4px;
   border-radius: 999px;
-  background: #e8e8ed;
+  border: 1px solid var(--border);
+  background: #e4e6e8;
 }
 
 .report-tab {
@@ -429,7 +502,7 @@ a:hover {
 
 .report-tab.active {
   background: #fff;
-  color: var(--text);
+  color: var(--navy);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -440,9 +513,9 @@ a:hover {
   gap: 18px;
   margin-top: 18px;
   padding: 14px 16px;
-  border: 1px solid rgba(0, 113, 227, 0.12);
-  border-radius: 16px;
-  background: var(--primary-soft);
+  border: 1px solid rgba(0, 63, 127, 0.16);
+  border-radius: 8px;
+  background: var(--navy-soft);
 }
 
 .report-toolbar p {
@@ -494,13 +567,13 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 16px 18px;
+  padding: 13px 16px;
   border-bottom: 1px solid var(--border);
   transition: background 150ms ease;
 }
 
 .student-row:hover {
-  background: #fafafa;
+  background: #f4f7fa;
 }
 
 .student-row:last-child {
@@ -515,6 +588,7 @@ a:hover {
 }
 
 .student-details strong {
+  color: #111;
   font-size: 15px;
   letter-spacing: -0.01em;
 }
@@ -585,14 +659,14 @@ a:hover {
 }
 
 .student-row .note-button {
-  border: 1px solid rgba(0, 113, 227, 0.18);
-  background: var(--primary-soft);
-  color: var(--primary);
+  border: 1px solid rgba(0, 63, 127, 0.2);
+  background: var(--navy-soft);
+  color: var(--navy);
 }
 
 .student-row .note-button:hover {
-  background: #dcecff;
-  box-shadow: 0 7px 18px rgba(0, 113, 227, 0.12);
+  background: #dceaf7;
+  box-shadow: 0 7px 18px rgba(0, 63, 127, 0.12);
 }
 
 .status-badge {
@@ -679,7 +753,7 @@ a:hover {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border: 1px solid var(--border);
-  border-radius: 15px;
+  border-radius: 7px;
   background: #fff;
 }
 
@@ -701,9 +775,9 @@ tr:last-child td {
 }
 
 th {
-  background: #fafafa;
-  color: var(--muted);
-  font-size: 11px;
+  background: var(--sidebar);
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -725,7 +799,7 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #fafafa;
+  background: #f4f7fa;
 }
 
 .empty-state {
@@ -739,23 +813,32 @@ tbody tr:hover {
   display: none;
 }
 
-@media (max-width: 620px) {
+@media (max-width: 720px) {
   body {
     align-items: flex-start;
-    padding: 14px;
-    padding-top: max(14px, env(safe-area-inset-top));
-    padding-right: max(14px, env(safe-area-inset-right));
-    padding-bottom: max(14px, env(safe-area-inset-bottom));
-    padding-left: max(14px, env(safe-area-inset-left));
+    padding: 0;
   }
 
   .container {
-    border-radius: 22px;
+    border-radius: 0;
   }
 
-  .auth-container,
-  .dashboard-container {
+  .auth-container {
+    width: auto;
+    align-self: stretch;
+    margin: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    border-radius: 10px;
+  }
+
+  .auth-container {
     padding: 34px 20px 26px;
+  }
+
+  .dashboard-container {
+    width: 100%;
+    min-height: 100svh;
+    padding: 0 14px max(28px, env(safe-area-inset-bottom));
+    border: 0;
   }
 
   h1 {
@@ -763,7 +846,18 @@ tbody tr:hover {
   }
 
   .dashboard-header {
-    flex-direction: column;
+    height: auto;
+    margin: 0 -14px 24px;
+  }
+
+  .dashboard-header > div:first-child {
+    position: static;
+    min-height: 0;
+    padding: max(20px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) 20px max(18px, env(safe-area-inset-left));
+  }
+
+  .dashboard-header > div:first-child h1 {
+    font-size: 29px;
   }
 
   .dashboard-header button {
@@ -771,9 +865,17 @@ tbody tr:hover {
   }
 
   .header-actions {
-    width: 100%;
+    position: static;
+    width: auto;
     align-items: stretch;
     flex-direction: column;
+    padding: 8px 0;
+  }
+
+  .header-actions .button-link,
+  .header-actions button {
+    min-height: 48px;
+    padding: 12px max(18px, env(safe-area-inset-right)) 12px max(18px, env(safe-area-inset-left));
   }
 
   .header-actions .button-link {
@@ -782,7 +884,7 @@ tbody tr:hover {
 
   .panel {
     padding: 20px 16px;
-    border-radius: 17px;
+    border-radius: 8px;
   }
 
   .form-grid {
