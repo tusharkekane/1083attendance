@@ -23,16 +23,27 @@ loginForm.addEventListener("submit", async (event) => {
 
     const profile = profileSnapshot.data();
 
+    if (profile.role === "scout") {
+      await signOut(auth);
+      showMessage("Scout login is not available. An Adult Leader manages Scout attendance.", "error");
+      return;
+    }
+
     if (profile.status === "inactive") {
       await signOut(auth);
-      const accountType = profile.role === "leader" ? "Adult Leader" : "Scout";
-      showMessage(`This ${accountType} account has been archived. Ask an active Adult Leader for help.`, "error");
+      showMessage("This Adult Leader account has been archived. Ask an active Adult Leader for help.", "error");
       return;
     }
 
     if (profile.role === "pending") {
       await signOut(auth);
       showMessage("Your Adult Leader registration is waiting for approval.", "error");
+      return;
+    }
+
+    if (profile.role !== "leader") {
+      await signOut(auth);
+      showMessage("Only active Adult Leaders can log in.", "error");
       return;
     }
 

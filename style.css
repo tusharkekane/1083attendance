@@ -22,11 +22,16 @@
 }
 
 html {
+  min-height: 100%;
   color-scheme: light;
+  background: var(--background);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
+  width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   padding: 42px 20px;
   background:
     radial-gradient(circle at 12% 0%, rgba(0, 113, 227, 0.13), transparent 31rem),
@@ -43,11 +48,13 @@ body {
 .container {
   position: relative;
   width: 100%;
+  min-width: 0;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 28px;
   background: var(--surface);
   box-shadow: var(--shadow);
+  -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
 }
 
@@ -80,7 +87,14 @@ textarea {
 }
 
 textarea {
+  width: 100%;
   min-height: 112px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--text);
+  font-size: 16px;
   resize: vertical;
 }
 
@@ -306,6 +320,10 @@ a:hover {
   border-bottom: 1px solid var(--border);
 }
 
+.dashboard-header > div:first-child {
+  min-width: 0;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -313,6 +331,7 @@ a:hover {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 10px;
+  max-width: 100%;
 }
 
 .button-link {
@@ -342,6 +361,7 @@ a:hover {
 }
 
 .panel {
+  min-width: 0;
   margin-top: 20px;
   padding: 25px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -657,6 +677,7 @@ a:hover {
 .table-wrapper {
   margin-top: 17px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--border);
   border-radius: 15px;
   background: #fff;
@@ -722,6 +743,10 @@ tbody tr:hover {
   body {
     align-items: flex-start;
     padding: 14px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    padding-left: max(14px, env(safe-area-inset-left));
   }
 
   .container {
@@ -774,10 +799,14 @@ tbody tr:hover {
 
   .report-tabs {
     display: flex;
+    width: 100%;
   }
 
   .report-tab {
     flex: 1;
+    min-width: 0;
+    padding-right: 12px;
+    padding-left: 12px;
   }
 
   .report-toolbar,

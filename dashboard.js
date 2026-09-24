@@ -23,9 +23,7 @@ let displayedDate = getToday();
 let selectedNoteScout = null;
 
 const welcome = document.getElementById("welcome");
-const scoutPanel = document.getElementById("scoutPanel");
 const leaderPanel = document.getElementById("leaderPanel");
-const scoutAttendanceBtn = document.getElementById("scoutAttendanceBtn");
 const manageScoutsLink = document.getElementById("manageScoutsLink");
 const manageLeadersLink = document.getElementById("manageLeadersLink");
 const reportsLink = document.getElementById("reportsLink");
@@ -36,15 +34,6 @@ const noteForm = document.getElementById("noteForm");
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
   window.location.replace("login.html");
-});
-
-scoutAttendanceBtn.addEventListener("click", () => {
-  const scout = {
-    uid: currentUser.uid,
-    name: currentProfile.name,
-    scoutId: currentProfile.scoutId,
-  };
-  markAttendance(scout);
 });
 
 document.getElementById("closeNoteDialog").addEventListener("click", closeNoteDialog);
@@ -79,28 +68,13 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     currentProfile = profileSnapshot.data();
 
-    if (currentProfile.status === "inactive") {
+    if (currentProfile.role !== "leader" || currentProfile.status !== "active") {
       await signOut(auth);
       window.location.replace("login.html");
       return;
     }
 
-    if (currentProfile.role === "pending") {
-      await signOut(auth);
-      window.location.replace("login.html");
-      return;
-    }
-
-    const roleLabel = currentProfile.role === "leader" ? "Adult Leader" : "Scout";
-    welcome.textContent = `Welcome, ${currentProfile.name} (${roleLabel})`;
-
-    if (currentProfile.role === "leader") {
-      try {
-        await openAttendanceDay();
-      } catch (error) {
-        showMessage(`Scout self-check-in could not be opened: ${error.message}`, "error");
-      }
-    }
+    welcome.textContent = `Welcome, ${currentProfile.name} (Adult Leader)`;
 
     if (!listenersStarted) {
       listenersStarted = true;
@@ -112,73 +86,49 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 function startDataListeners() {
-  const isLeader = currentProfile.role === "leader";
-
-  scoutPanel.hidden = isLeader;
-  leaderPanel.hidden = !isLeader;
-  manageScoutsLink.hidden = !isLeader;
-  manageLeadersLink.hidden = !isLeader;
-  reportsLink.hidden = !isLeader;
-
-  if (isLeader) {
-    notesHistoryPanel.hidden = false;
-
-    onSnapshot(
-      query(collection(db, "users"), where("role", "==", "scout")),
-      (snapshot) => {
-        scouts = snapshot.docs.map((item) => ({ uid: item.id, ...item.data() }));
-        scouts.sort((a, b) => a.name.localeCompare(b.name));
-        renderScoutRoster();
-      },
-      handleSnapshotError
-    );
-
-    onSnapshot(
-      collection(db, "scoutNotes"),
-      (snapshot) => {
-        noteRecords = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
-        renderScoutRoster();
-        renderNotesHistory();
-      },
-      handleSnapshotError
-    );
-  }
-
-  const attendanceQuery = isLeader
-    ? collection(db, "attendance")
-    : query(collection(db, "attendance"), where("scoutUid", "==", currentUser.uid));
+  leaderPanel.hidden = false;
+  manageScoutsLink.hidden = false;
+  manageLeadersLink.hidden = false;
+  reportsLink.hidden = false;
+  notesHistoryPanel.hidden = false;
 
   onSnapshot(
-    attendanceQuery,
+    query(collection(db, "users"), where("role", "==", "scout")),
     (snapshot) => {
-      attendanceRecords = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+      scouts = snapshot.docs.map((item) => ({ uid: item.id, ...item.data() }));
+      scouts.sort((a, b) => a.name.localeCompare(b.name));
       renderScoutRoster();
-      renderScoutStatus();
     },
     handleSnapshotError
   );
 
-  const activityQuery = isLeader
-    ? collection(db, "attendanceAudit")
-    : query(collection(db, "attendanceAudit"), where("scoutUid", "==", currentUser.uid));
+  onSnapshot(
+    collection(db, "scoutNotes"),
+    (snapshot) => {
+      noteRecords = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+      renderScoutRoster();
+      renderNotesHistory();
+    },
+    handleSnapshotError
+  );
 
   onSnapshot(
-    activityQuery,
+    collection(db, "attendance"),
+    (snapshot) => {
+      attendanceRecords = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+      renderScoutRoster();
+    },
+    handleSnapshotError
+  );
+
+  onSnapshot(
+    collection(db, "attendanceAudit"),
     (snapshot) => {
       activityRecords = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
       renderActivity();
     },
     handleSnapshotError
   );
-}
-
-async function openAttendanceDay() {
-  await setDoc(doc(db, "settings", "attendance"), {
-    activeDate: getToday(),
-    openedAt: serverTimestamp(),
-    openedByUid: currentUser.uid,
-    openedByName: currentProfile.name,
-  });
 }
 
 function renderScoutRoster() {
@@ -207,7 +157,8 @@ function renderScoutRoster() {
     const scoutNote = noteRecords.find(
       (record) => record.scoutUid === scout.uid && record.date === today
     );
-    const row = createRosterRow(scout.name, `${scout.scoutId} · ${scout.email}`);
+    const contactDetails = scout.email ? `${scout.scoutId} · ${scout.email}` : scout.scoutId;
+    const row = createRosterRow(scout.name, contactDetails);
     const details = row.querySelector(".student-details");
     const actions = document.createElement("div");
     actions.className = "row-actions";
@@ -335,27 +286,6 @@ async function saveScoutNote(event) {
   }
 }
 
-function renderScoutStatus() {
-  if (!currentProfile || currentProfile.role !== "scout") {
-    return;
-  }
-
-  const todayRecord = attendanceRecords.find((record) => record.date === getToday());
-  const statusText = document.getElementById("scoutStatusText");
-  const isPresent = todayRecord?.status === "Present";
-
-  scoutAttendanceBtn.disabled = isPresent;
-  scoutAttendanceBtn.textContent = isPresent ? "Present Today" : "Mark My Attendance";
-
-  if (isPresent) {
-    statusText.textContent = `Attendance marked by ${todayRecord.markedByName}.`;
-  } else if (todayRecord?.status === "Unmarked") {
-    statusText.textContent = `Attendance was unmarked by ${todayRecord.unmarkedByName}. You may mark it again.`;
-  } else {
-    statusText.textContent = "Mark yourself present for today.";
-  }
-}
-
 async function markAttendance(scout) {
   const today = getToday();
   const attendanceRef = doc(db, "attendance", `${scout.uid}_${today}`);
@@ -401,10 +331,7 @@ async function markAttendance(scout) {
 
     showMessage(`${scout.name}'s attendance was marked by ${currentProfile.name}.`, "success");
   } catch (error) {
-    const message = error.code === "permission-denied" && currentProfile.role === "scout"
-      ? "Today's Scout self-check-in is not open. Please ask an Adult Leader to open the dashboard."
-      : error.message;
-    showMessage(message, "error");
+    showMessage(error.message, "error");
   }
 }
 
@@ -580,18 +507,8 @@ async function checkForNewDate() {
     return;
   }
 
-  if (currentProfile?.role === "leader") {
-    try {
-      await openAttendanceDay();
-    } catch (error) {
-      showMessage(`The new attendance day could not be opened: ${error.message}`, "error");
-      return;
-    }
-  }
-
   displayedDate = currentDate;
   renderScoutRoster();
-  renderScoutStatus();
   showMessage("A new attendance day has started. Today's roster is ready.", "success");
 }
 

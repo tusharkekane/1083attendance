@@ -24,7 +24,7 @@
 
     <section class="panel">
       <h2>Add a Scout</h2>
-      <p>Create the Scout's login and add them to the active roster.</p>
+      <p>Add the Scout to the active roster. Scouts do not receive login accounts.</p>
       <form id="addScoutForm" class="management-form">
         <div class="form-grid">
           <div class="field-group">
@@ -37,15 +37,7 @@
           </div>
           <div class="field-group">
             <label for="scoutEmail">Email</label>
-            <input type="email" id="scoutEmail" placeholder="scout@example.com" autocomplete="off" required>
-          </div>
-          <div class="field-group">
-            <label for="scoutPassword">Initial password</label>
-            <input type="password" id="scoutPassword" placeholder="At least 6 characters" minlength="6" autocomplete="new-password" required>
-          </div>
-          <div class="field-group full-width-field">
-            <label for="confirmScoutPassword">Confirm initial password</label>
-            <input type="password" id="confirmScoutPassword" placeholder="Enter the password again" minlength="6" autocomplete="new-password" required>
+            <input type="email" id="scoutEmail" placeholder="Optional contact email" autocomplete="off">
           </div>
         </div>
         <button id="addScoutButton" type="submit" disabled>Add Scout</button>
@@ -54,7 +46,7 @@
 
     <section class="panel">
       <h2>Active Scouts</h2>
-      <p>Removing a Scout archives their account while preserving all attendance history.</p>
+      <p>Removing a Scout archives their roster entry while preserving all attendance history.</p>
       <div id="activeScoutRoster" class="student-roster management-roster"></div>
     </section>
 

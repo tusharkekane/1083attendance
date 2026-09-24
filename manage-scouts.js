@@ -1,8 +1,4 @@
-import { deleteApp, initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import {
-  createUserWithEmailAndPassword,
-  deleteUser,
-  getAuth,
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -17,7 +13,7 @@ import {
   updateDoc,
   where,
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-import { auth, db, firebaseConfig } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 
 let currentUser = null;
 let currentProfile = null;
@@ -94,13 +90,6 @@ async function addScout(event) {
   const name = document.getElementById("scoutName").value.trim();
   const scoutId = document.getElementById("scoutId").value.trim();
   const email = document.getElementById("scoutEmail").value.trim().toLowerCase();
-  const password = document.getElementById("scoutPassword").value;
-  const confirmPassword = document.getElementById("confirmScoutPassword").value;
-
-  if (password !== confirmPassword) {
-    showMessage("The Scout passwords do not match.", "error");
-    return;
-  }
 
   const duplicateScoutId = scouts.some(
     (scout) => scout.scoutId?.toLowerCase() === scoutId.toLowerCase()
@@ -115,21 +104,17 @@ async function addScout(event) {
   addScoutButton.disabled = true;
   addScoutButton.textContent = "Adding Scout...";
 
-  const secondaryApp = initializeApp(firebaseConfig, `scout-creator-${Date.now()}`);
-  const secondaryAuth = getAuth(secondaryApp);
-  let createdScoutUser = null;
-
   try {
-    const credential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
-    createdScoutUser = credential.user;
+    const scoutRef = doc(collection(db, "users"));
 
-    await setDoc(doc(db, "users", credential.user.uid), {
-      uid: credential.user.uid,
+    await setDoc(scoutRef, {
+      uid: scoutRef.id,
       name,
       email,
       role: "scout",
       requestedRole: "scout",
       status: "active",
+      loginEnabled: false,
       scoutId,
       createdByUid: currentUser.uid,
       createdByName: currentProfile.name,
@@ -139,27 +124,8 @@ async function addScout(event) {
     addScoutForm.reset();
     showMessage(`${name} was added to the active Scout roster.`, "success");
   } catch (error) {
-    if (createdScoutUser) {
-      try {
-        await deleteUser(createdScoutUser);
-      } catch (cleanupError) {
-        console.error("Unable to clean up the incomplete Scout account:", cleanupError);
-      }
-    }
-
-    const friendlyMessages = {
-      "auth/email-already-in-use": "This email is already registered.",
-      "auth/weak-password": "Please choose a stronger password.",
-      "auth/invalid-email": "Please enter a valid email address.",
-    };
-    showMessage(friendlyMessages[error.code] || error.message, "error");
+    showMessage(error.message, "error");
   } finally {
-    try {
-      await signOut(secondaryAuth);
-    } catch (error) {
-      console.warn("Secondary sign-out was not needed:", error);
-    }
-    await deleteApp(secondaryApp);
     isAddingScout = false;
     addScoutButton.disabled = false;
     addScoutButton.textContent = "Add Scout";
@@ -176,7 +142,8 @@ function renderRosters(scouts) {
   archivedRoster.innerHTML = "";
 
   activeScouts.forEach((scout) => {
-    const row = createRosterRow(scout.name, `${scout.scoutId} · ${scout.email}`);
+    const contactDetails = scout.email ? `${scout.scoutId} · ${scout.email}` : scout.scoutId;
+    const row = createRosterRow(scout.name, contactDetails);
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = "Remove Scout";
